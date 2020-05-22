@@ -1,16 +1,25 @@
-import {getRealm} from './Realm';
 import {Alert} from 'react-native';
+import {getRealm} from './Realm';
+import {v1 as uuidv1} from 'uuid';
 
-export const saveEntry = async () => {
+export const getEntries = async () => {
+  const realm = await getRealm();
+
+  const entries = realm.objects('Entry');
+
+  return entries;
+};
+
+export const saveEntry = async (value, entry = {}) => {
   const realm = await getRealm();
   let data = {};
 
   try {
     realm.write(() => {
       data = {
-        id: 'ABC', //abraubsua - codigo aleatorio
-        amount: 12.4,
-        entryAt: new Date(),
+        id: value.id || entry.id || uuidv1(),
+        amount: value.amount || entry.amount,
+        entryAt: value.entryAt || entry.entryAt,
         isInit: false,
       };
 
@@ -22,4 +31,19 @@ export const saveEntry = async () => {
     Alert.alert('Erro ao salvar os dados de lançamento');
   }
   return data;
+};
+
+export const deleteEntry = async (entry) => {
+  const realm = await getRealm();
+
+  try {
+    realm.write(() => {
+      realm.delete(entry);
+    });
+  } catch (error) {
+    console.error(
+      'deleteEntry :: error on delete object :',
+      JSON.stringify(entry),
+    );
+  }
 };

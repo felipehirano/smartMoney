@@ -1,18 +1,39 @@
-import React from 'react';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, FlatList, StyleSheet, Button} from 'react-native';
 import EntryListItem from './EntryListItem';
+import {getEntries} from '../../services/Entries';
 
-const EntryList = () => {
+const EntryList = ({navigation}) => {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    async function loadEntries() {
+      const data = await getEntries();
+      console.log(data);
+      setEntries(data);
+    }
+    loadEntries();
+  }, []);
+
   return (
     <View>
       <Text style={styles.title}>Últimos Lançamentos</Text>
       <FlatList
-        data={[
-          {key: 'Padaria asa branca: $10'},
-          {key: 'Supermercado Isadora: $190'},
-          {key: 'Posto Ipiranga: $190'},
-        ]}
-        renderItem={({item}) => <Text>{item.key}</Text>}
+        data={entries}
+        renderItem={({item}) => (
+          <View>
+            <Text style={styles.entry}>
+              - {item.description} - ${item.amount}
+            </Text>
+            <Button
+              title={item.id}
+              onPress={() => {
+                navigation.navigate('NewEntry', {entry: item});
+              }}
+            />
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );
