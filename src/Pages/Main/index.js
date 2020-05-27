@@ -1,29 +1,30 @@
 import React from 'react';
-import {View, Button, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import BalancePanel from '../../components/BalancePanel';
 import EntrySummary from '../../components/EntrySummary';
 import EntryList from '../../components/EntryList';
 
-const Main = ({navigation}) => {
-  const saldo = '$2.064,37';
+import Colors from '../../styles/Colors';
 
+const Main = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <BalancePanel currentBalance={saldo} />
-      <Button
-        title="Adicionar"
-        onPress={() => navigation.navigate('NewEntry')}
+      <BalancePanel onNewEntryPress={() => navigation.navigate('NewEntry')} />
+      <EntrySummary onPressActionButton={() => navigation.navigate('Report')} />
+      <EntryList
+        onPressActionButton={() => navigation.navigate('Report')}
+        onEntryPress={(entry) =>
+          navigation.navigate('NewEntry', {entry: entry})
+        }
       />
-      <EntrySummary />
-      <EntryList navigation={navigation} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    padding: 10,
+    flex: 1,
+    backgroundColor: Colors.background,
   },
 });
 

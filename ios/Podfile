@@ -81,6 +81,10 @@ target 'smartMoney' do
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'smartMoneyTests' do
     inherit! :complete
     # Pods for testing
