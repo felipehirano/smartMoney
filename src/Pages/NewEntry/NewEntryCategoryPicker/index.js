@@ -13,6 +13,11 @@ import {
   getCreditCategories,
 } from '../../../services/Categories';
 
+import ActionFooter, {
+  ActionPrimaryButton,
+  ActionSecundaryButton,
+} from '../../../components/Core/ActionFooter';
+
 const NewEntryCategoryPicker = ({debit, category, onChangeCategory}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [debitCategories, setdebitCategories] = useState([]);
@@ -63,10 +68,10 @@ const NewEntryCategoryPicker = ({debit, category, onChangeCategory}) => {
               </TouchableOpacity>
             )}
           />
-          <TouchableOpacity style={styles.closeButton} onPress={onClosePress}>
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
         </View>
+        <ActionFooter>
+          <ActionPrimaryButton title="Fechar" onPress={onClosePress} />
+        </ActionFooter>
       </Modal>
     </View>
   );
@@ -99,22 +104,6 @@ const styles = StyleSheet.create({
   modalItemText: {
     fontSize: 22,
     color: Colors.white,
-    textAlign: 'center',
-  },
-  closeButton: {
-    borderColor: Colors.green,
-    backgroundColor: Colors.background,
-    borderWidth: 2,
-    borderRadius: 15,
-    marginVertical: 10,
-    marginHorizontal: 20,
-    paddingVertical: 3,
-    paddingHorizontal: 5,
-    alignSelf: 'center',
-  },
-  closeButtonText: {
-    fontSize: 14,
-    color: Colors.green,
     textAlign: 'center',
   },
 });
