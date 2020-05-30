@@ -1,38 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {
-  FlatList,
-  View,
-  TouchableOpacity,
-  Text,
-  Modal,
-  StyleSheet,
-} from 'react-native';
+import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import Colors from '../../../styles/Colors';
-import {
-  getDebitCategories,
-  getCreditCategories,
-} from '../../../services/Categories';
-
-import ActionFooter, {
-  ActionPrimaryButton,
-  ActionSecundaryButton,
-} from '../../../components/Core/ActionFooter';
+import CategoryModal from '../../../components/CategoryModal';
 
 const NewEntryCategoryPicker = ({debit, category, onChangeCategory}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [debitCategories, setdebitCategories] = useState([]);
-  const [creditCategories, setCreditCategories] = useState([]);
-
-  useEffect(() => {
-    async function loadCategories() {
-      setdebitCategories(await getDebitCategories());
-      setCreditCategories(await getCreditCategories());
-    }
-
-    loadCategories();
-
-    console.log('NewEntryCategoryPicker :: useEffect');
-  }, []);
 
   const onCategoryPress = (item) => {
     onChangeCategory(item);
@@ -52,27 +24,12 @@ const NewEntryCategoryPicker = ({debit, category, onChangeCategory}) => {
         }}>
         <Text style={styles.pickerButtonText}>{category.name}</Text>
       </TouchableOpacity>
-
-      <Modal animationType="slide" transparent={false} visible={modalVisible}>
-        <View style={styles.modal}>
-          <FlatList
-            data={debit ? debitCategories : creditCategories}
-            keyExtractor={(item) => item.id}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                onPress={() => {
-                  onCategoryPress(item);
-                }}
-                style={[styles.modalItem, {color: item.color}]}>
-                <Text style={styles.modalItemText}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-        <ActionFooter>
-          <ActionPrimaryButton title="Fechar" onPress={onClosePress} />
-        </ActionFooter>
-      </Modal>
+      <CategoryModal
+        categoryType={debit ? 'debit' : 'credit'}
+        isVisible={modalVisible}
+        onConfirm={onCategoryPress}
+        onCancel={onClosePress}
+      />
     </View>
   );
 };

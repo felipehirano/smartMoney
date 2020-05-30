@@ -4,7 +4,7 @@ import {v1 as uuidv1} from 'uuid';
 
 import moment from '../vendors/moment';
 
-export const getEntries = async (days) => {
+export const getEntries = async (days, category) => {
   let realm = await getRealm();
   realm = realm.objects('Entry');
 
@@ -12,6 +12,10 @@ export const getEntries = async (days) => {
     const now = moment(date);
     const date = now.subtract(days, 'days').toDate();
     realm = realm.filtered('entryAt >= $0', date);
+  }
+
+  if (category && category.id) {
+    realm = realm.filtered('category.name == $0', category.name);
   }
 
   const entries = realm.sorted('entryAt', true);
